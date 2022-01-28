@@ -13,6 +13,6 @@ public class Lexer
         return null;
     }
     public static void main(String[] args){
-
+        System.out.println("Connor and Micaiah's awesome project");
     }
 }
