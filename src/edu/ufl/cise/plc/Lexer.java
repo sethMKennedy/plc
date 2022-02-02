@@ -33,6 +33,7 @@ public class Lexer
         System.out.println("Connor and Micaiah's awesome project");
         //runFile(args[0]);
         run("*");
+        //Put what you want to lex in here
     }
 
     private static void runFile(String path) throws IOException {
