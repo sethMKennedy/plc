@@ -8,9 +8,9 @@ import java.io.InputStreamReader;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.Scanner;
+//import java.util.Scanner;
 import java.util.List;
-
+import edu.ufl.cise.plc.Scanner;
 
 public class Lexer
     implements ILexer {
@@ -31,7 +31,8 @@ public class Lexer
     public static void main(String[] args) throws IOException {
 
         System.out.println("Connor and Micaiah's awesome project");
-        runFile(args[0]);
+        //runFile(args[0]);
+        run("*");
     }
 
     private static void runFile(String path) throws IOException {
@@ -56,7 +57,8 @@ public class Lexer
 
     public static void run(String source) {
         Scanner scanner = new Scanner(source);
-        List<Token> tokens = Scanner.scanTokens();
+
+        List<Token> tokens = scanner.scanTokens();
 
         for(Token token : tokens) {
             System.out.println(token);
