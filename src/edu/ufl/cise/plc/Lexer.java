@@ -41,8 +41,8 @@ public class Lexer implements ILexer{
         this.source = source;
         char c = advanceToken();
         //switch statements for determining Kind
-        //this first set of statements don't need a peek function to check
-        //for additional elements of the token
+        //this first set of statements do not need a peek function to check
+        //for additional elements of the lexeme
         switch (c) {
             //single char lexemes
             case '(' : addToken(IToken.Kind.LPAREN); break;
@@ -50,22 +50,81 @@ public class Lexer implements ILexer{
             case '[' : addToken(IToken.Kind.LSQUARE); break;
             case ']' : addToken(IToken.Kind.RSQUARE); break;
             case '+' : addToken(IToken.Kind.PLUS); break;
-            case '-' : addToken(IToken.Kind.MINUS); break;
+            case '-' :
+                if(secondChecker('>')){
+                    addToken(IToken.Kind.RARROW);
+                }
+                else{
+                    addToken(IToken.Kind.MINUS);
+                }
+                break;
             case '*' : addToken(IToken.Kind.TIMES); break;
-            case '/' : addToken(IToken.Kind.DIV); break;
             case '%' : addToken(IToken.Kind.MOD); break;
             case '&' : addToken(IToken.Kind.AND); break;
             case '|' : addToken(IToken.Kind.OR); break;
             case ';' : addToken(IToken.Kind.SEMI); break;
             case ',' : addToken(IToken.Kind.COMMA); break;
             case '^' : addToken(IToken.Kind.RETURN); break;
-            //operators
-            //case '!': addToken(match('='))
+            //operators - checks for a secondary character and classifies accordingly
+            case '<' :
+                if(secondChecker('<')){
+                    addToken(IToken.Kind.LANGLE);
+                }
+                else if (secondChecker('=')){
+                    addToken(IToken.Kind.LE);
+                }
+                else if(secondChecker('-')){
+                    addToken(IToken.Kind.LARROW);
+                }
+                else addToken(IToken.Kind.LT);
+                break;
+            case '>' :
+                if(secondChecker('>')){
+                    addToken(IToken.Kind.RANGLE);
+                }
+                else if (secondChecker('=')){
+                    addToken(IToken.Kind.GE);
+                }
+                else addToken(IToken.Kind.GT);
+                break;
+            case '=' : addToken(secondChecker('=') ? IToken.Kind.EQUALS : IToken.Kind.ASSIGN);
+                break;
+            case '!' : addToken(secondChecker('=') ? IToken.Kind.NOT_EQUALS : IToken.Kind.BANG);
+                break;
+                //making sure to ignore comments.
+            case '/':
+                if(secondChecker('/')){
+                    //advances token past all characters until newline reached.
+                    while(charPeek() != '\n' && !AtEnd()) advanceToken();
+                }
+                else{
+                    addToken(IToken.Kind.DIV);
+                }
+                break;
+                //skippers
+             case ' ':
+             case '\r':
+             case '\t':
+                 break;
+            case '\n':
+                line++;
+                break;
 
             default:
                 throw new LexicalException("Unexpected Character",line,1);
 
         }
+    }
+    //this method only advances the scanner after checking for a secondary
+    //character in longer lexemes like operators
+    private boolean secondChecker(char secondary){
+        //if the scanner is at the end of a token, there is no additional check
+        if (AtEnd()) return false;
+        //if the secondary character isnt what is expected, return false.
+        if(source.charAt(current) != secondary) return false;
+
+        current++;
+        return true;
     }
 
     //method for checking if at the end of reading in current lexeme.
@@ -88,9 +147,9 @@ public class Lexer implements ILexer{
         tokens.add(new Token(type, text, literal, line));
     }
 
-    //main method
+    //****************MAIN***********************
     public static void main(String[] args) throws LexicalException {
-        Lexer lex = new Lexer("* * + / *");
+        Lexer lex = new Lexer("<  -  ( (");
         lex.runLex();
 
     }
@@ -104,6 +163,11 @@ public class Lexer implements ILexer{
     @Override
     public IToken peek() throws LexicalException {
         return null;
+    }
+    //peek method for characters
+    public char charPeek(){
+        if(AtEnd()) return '\0';
+        return source.charAt(current);
     }
 
     private void runLex() throws LexicalException {
