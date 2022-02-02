@@ -56,7 +56,7 @@ public class Lexer
 
     public static void run(String source) {
         Scanner scanner = new Scanner(source);
-        List<Token> tokens = scanner.scanTokens();
+        List<Token> tokens = Scanner.scanTokens();
 
         for(Token token : tokens) {
             System.out.println(token);
