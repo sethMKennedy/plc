@@ -65,7 +65,9 @@ public class Lexer implements ILexer{
             case ';' : addToken(IToken.Kind.SEMI); break;
             case ',' : addToken(IToken.Kind.COMMA); break;
             case '^' : addToken(IToken.Kind.RETURN); break;
-            //operators - checks for a secondary character and classifies accordingly
+
+            //OPERATORS - checks for a secondary character and classifies accordingly
+
             case '<' :
                 if(secondChecker('<')){
                     addToken(IToken.Kind.LANGLE);
@@ -110,10 +112,73 @@ public class Lexer implements ILexer{
                 line++;
                 break;
 
+                //STRING LITERALS
+            case '"': stringLit();
+            break;
+
             default:
-                throw new LexicalException("Unexpected Character",line,1);
+                if(isDigit(c)){
+                    intLit();
+                }
+                else {
+                    throw new LexicalException("Unexpected Character", line, 1);
+                }
 
         }
+    }
+    //this is like the stringLit() method but for numbers
+    private void intLit() throws LexicalException {
+        boolean isFloat = false;
+        while(isDigit(charPeek())){
+            advanceToken();
+        }
+        //this checks for decimals, advances over decimal
+        if(isDigit(peekOver()) && (charPeek() =='.' )){
+            isFloat = true;
+            advanceToken();
+            while(isDigit(charPeek())){
+                advanceToken();
+            }
+        }
+        if(isFloat){
+            addToken(IToken.Kind.FLOAT_LIT, Float.parseFloat(source.substring(start, current)));
+
+        }
+        else{
+            addToken(IToken.Kind.INT_LIT,Integer.parseInt(source.substring(start, current) ));
+        }
+    }
+
+    private char peekOver(){
+        if(1+current >= source.length()){
+            return '\0';
+        }
+        return source.charAt(current+1);
+    }
+
+    //checks if the character is an integer 0-9.
+    private boolean isDigit(char c){
+        return c>= '0' && c <= '9';
+    }
+    //method for handling string literals
+    private void stringLit() throws LexicalException {
+        //while not at end of string and not on a closing quote
+        while(!AtEnd() && charPeek() != '"'){
+            //if the token is a newline, advance line counter.
+            if(charPeek() == '\n'){
+                line++;
+            }
+            advanceToken();
+        }
+        //when the token reaches the end with no quote, string is incomplete
+        if(AtEnd()){
+            throw new LexicalException("Unterminated String", line,1);
+
+        }
+        advanceToken();
+        //captures the string without quotes
+        String stringLit = source.substring(start+1, current-1);
+        addToken(IToken.Kind.STRING_LIT, stringLit);
     }
     //this method only advances the scanner after checking for a secondary
     //character in longer lexemes like operators
@@ -147,14 +212,12 @@ public class Lexer implements ILexer{
         tokens.add(new Token(type, text, literal, line));
     }
 
-    //****************MAIN***********************
+    //*************************MAIN**************************************
     public static void main(String[] args) throws LexicalException {
-        Lexer lex = new Lexer("<  -  ( (");
+        Lexer lex = new Lexer("12345.243");
         lex.runLex();
 
     }
-
-
     @Override
     public IToken next() throws LexicalException {
         return null;
