@@ -2,6 +2,7 @@ package edu.ufl.cise.plc;
 
 public class Token implements IToken{
     //class variables for Token
+    SourceLocation source;
     Kind kind;
     String lexeme;
     Object literal;
@@ -27,7 +28,7 @@ public class Token implements IToken{
 
     @Override
     public SourceLocation getSourceLocation() {
-        return null;
+        return source;
     }
 
     @Override

@@ -214,7 +214,7 @@ public class Lexer implements ILexer{
 
     //*************************MAIN**************************************
     public static void main(String[] args) throws LexicalException {
-        Lexer lex = new Lexer("12345.243");
+        Lexer lex = new Lexer("12345.243 1");
         lex.runLex();
 
     }
