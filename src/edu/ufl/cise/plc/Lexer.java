@@ -120,12 +120,42 @@ public class Lexer implements ILexer{
                 if(isDigit(c)){
                     intLit();
                 }
+                else if (isChar(c)){
+                    ident();
+                }
+
                 else {
                     throw new LexicalException("Unexpected Character", line, 1);
                 }
-
         }
     }
+    //method for checking if it is going to be an ident.
+    private boolean isChar(char c){
+        if ((c >= 'A' && c<= 'Z') ||
+        (c >= 'a' && c <= 'z')){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    //helper method for ident. can be a combo of alphabet chars and numbers.
+    private boolean identHelper(char c){
+        if(isChar(c) || isDigit(c)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+    private void ident(){
+        //while the ident is alpha numeric, keep reading in tokens.
+        while(identHelper(charPeek())){
+            advanceToken();
+        }
+        addToken(IToken.Kind.IDENT);
+    }
+
     //this is like the stringLit() method but for numbers
     private void intLit() throws LexicalException {
 
@@ -163,23 +193,26 @@ public class Lexer implements ILexer{
     }
     //method for handling string literals
     private void stringLit() throws LexicalException {
-        //while not at end of string and not on a closing quote
-        while(!AtEnd() && charPeek() != '"'){
-            //if the token is a newline, advance line counter.
-            if(charPeek() == '\n'){
-                line++;
+        //this will be a string *************
+
+            //while not at end of string and not on a closing quote
+            while (!AtEnd() && charPeek() != '"') {
+                //if the token is a newline, advance line counter.
+                if (charPeek() == '\n') {
+                    line++;
+                }
+                advanceToken();
+            }
+            //when the token reaches the end with no quote, string is incomplete
+            if (AtEnd()) {
+                throw new LexicalException("Unterminated String", line, 1);
+
             }
             advanceToken();
-        }
-        //when the token reaches the end with no quote, string is incomplete
-        if(AtEnd()){
-            throw new LexicalException("Unterminated String", line,1);
+            //captures the string without quotes
+            String stringLit = source.substring(start + 1, current - 1);
+            addToken(IToken.Kind.STRING_LIT, stringLit);
 
-        }
-        advanceToken();
-        //captures the string without quotes
-        String stringLit = source.substring(start+1, current-1);
-        addToken(IToken.Kind.STRING_LIT, stringLit);
     }
     //this method only advances the scanner after checking for a secondary
     //character in longer lexemes like operators
@@ -245,7 +278,7 @@ public class Lexer implements ILexer{
     }
     //*************************MAIN**************************************
     public static void main(String[] args) throws LexicalException {
-        Lexer lex = new Lexer(" 123.2 ");
+        Lexer lex = new Lexer("test");
         lex.runLex();
     }
 
