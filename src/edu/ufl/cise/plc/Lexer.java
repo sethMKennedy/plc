@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Scanner;
 
 
-
+//Main is at the bottom.
 
 public class Lexer implements ILexer{
     private String source;
@@ -128,6 +128,7 @@ public class Lexer implements ILexer{
     }
     //this is like the stringLit() method but for numbers
     private void intLit() throws LexicalException {
+
         boolean isFloat = false;
         while(isDigit(charPeek())){
             advanceToken();
@@ -186,8 +187,9 @@ public class Lexer implements ILexer{
         //if the scanner is at the end of a token, there is no additional check
         if (AtEnd()) return false;
         //if the secondary character isnt what is expected, return false.
-        if(source.charAt(current) != secondary) return false;
-
+        if(source.charAt(current) != secondary){
+            return false;
+        }
         current++;
         return true;
     }
@@ -199,6 +201,7 @@ public class Lexer implements ILexer{
 
     //advanced the current counter reading in the token
     private char advanceToken() {
+
         return source.charAt(current++);
     }
 
@@ -209,15 +212,12 @@ public class Lexer implements ILexer{
     //adds the current token to the Token ArrayList
     private void addToken(IToken.Kind type, Object literal) {
         String text = source.substring(start, current);
-        tokens.add(new Token(type, text, literal, line));
-    }
 
-    //*************************MAIN**************************************
-    public static void main(String[] args) throws LexicalException {
-        Lexer lex = new Lexer("12345.243 1");
-        lex.runLex();
+            tokens.add(new Token(type, text, literal, line));
 
     }
+
+
     @Override
     public IToken next() throws LexicalException {
         return null;
@@ -242,8 +242,11 @@ public class Lexer implements ILexer{
             System.out.println(token.getKind()+ " " + token.getText());
         }
 
-
-
+    }
+    //*************************MAIN**************************************
+    public static void main(String[] args) throws LexicalException {
+        Lexer lex = new Lexer(" 123.2 ");
+        lex.runLex();
     }
 
 }

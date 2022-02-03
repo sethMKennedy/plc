@@ -14,6 +14,11 @@ public class Token implements IToken{
         this.literal = literal;
         this.line = line;
     }
+    //overloaded constructor for Floats
+    Token(Kind kind, Float value, Object literal, int line){
+
+    }
+
 
     //returns the token kind
     @Override
@@ -33,12 +38,23 @@ public class Token implements IToken{
 
     @Override
     public int getIntValue() {
-        return 0;
-    }
+        //checks if the kind is an integer. If not, exception is thrown.
+        if(this.kind == Kind.INT_LIT) {
+            return Integer.parseInt(String.valueOf(literal));
+        }
+        else{
+            throw new UnsupportedOperationException("Not an Integer.");
+        }
 
+    }
     @Override
-    public float getFloatValue() {
-        return 0;
+    public float getFloatValue(){
+        if(this.kind == Kind.FLOAT_LIT) {
+            return Float.parseFloat(String.valueOf(literal));
+        }
+        else {
+            throw new UnsupportedOperationException("Not a Float.");
+        }
     }
 
     @Override
@@ -48,6 +64,11 @@ public class Token implements IToken{
 
     @Override
     public String getStringValue() {
-        return null;
+        if(this.kind == Kind.STRING_LIT) {
+            return (String)literal;
+        }
+        else{
+            throw new UnsupportedOperationException("Not a string.");
+        }
     }
 }
