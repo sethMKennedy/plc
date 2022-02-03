@@ -14,10 +14,7 @@ public class Token implements IToken{
         this.literal = literal;
         this.line = line;
     }
-    //overloaded constructor for Floats
-    Token(Kind kind, Float value, Object literal, int line){
 
-    }
 
 
     //returns the token kind
@@ -38,7 +35,7 @@ public class Token implements IToken{
 
     @Override
     public int getIntValue() {
-        //checks if the kind is an integer. If not, exception is thrown.
+        //checks if the kind is an integer, returns value. If not, exception is thrown.
         if(this.kind == Kind.INT_LIT) {
             return Integer.parseInt(String.valueOf(literal));
         }
