@@ -20,6 +20,7 @@ public class Lexer implements ILexer{
     private int start = 0;
     private int current = 0;
     private int line = 1;
+    //private int column = 0;
     private static final Map<String, IToken.Kind> keywords;
     static{
         keywords = new HashMap<>();
@@ -50,7 +51,7 @@ public class Lexer implements ILexer{
         keywords.put("boolean", IToken.Kind.TYPE);
         keywords.put("color", IToken.Kind.TYPE);
         keywords.put("image", IToken.Kind.TYPE);
-        keywords.put("void", IToken.Kind.TYPE);
+        keywords.put("void", IToken.Kind.KW_VOID);
 
         keywords.put("if", IToken.Kind.KW_IF);
         keywords.put("else", IToken.Kind.KW_ELSE);
@@ -76,7 +77,7 @@ public class Lexer implements ILexer{
             determineTokenKind();
 
         }
-        tokens.add(new Token(IToken.Kind.EOF, "", null, line));
+        tokens.add(new Token(IToken.Kind.EOF, "", null, line, current));
         return tokens;
     }
 
@@ -294,7 +295,7 @@ public class Lexer implements ILexer{
     private void addToken(IToken.Kind type, Object literal) {
         String text = source.substring(start, current);
 
-            tokens.add(new Token(type, text, literal, line));
+            tokens.add(new Token(type, text, literal, line, current));
 
     }
 
