@@ -37,29 +37,19 @@ public class Lexer implements ILexer{
         keywords.put("WHITE", IToken.Kind.COLOR_CONST);
         keywords.put("YELLOW", IToken.Kind.COLOR_CONST);
 
-        keywords.put("getRed", IToken.Kind.COLOR_OP);
-        keywords.put("getGreen", IToken.Kind.COLOR_OP);
-        keywords.put("getBlue", IToken.Kind.COLOR_OP);
-
-        keywords.put("getWidth", IToken.Kind.IMAGE_OP);
-        keywords.put("getHeight", IToken.Kind.IMAGE_OP);
-
-        keywords.put("string", IToken.Kind.TYPE);
-        keywords.put("int", IToken.Kind.TYPE);
-        keywords.put("float", IToken.Kind.TYPE);
-        keywords.put("boolean", IToken.Kind.TYPE);
-        keywords.put("color", IToken.Kind.TYPE);
-        keywords.put("image", IToken.Kind.TYPE);
-        keywords.put("void", IToken.Kind.TYPE);
+        keywords.put("string", IToken.Kind.IDENT);
+        keywords.put("int", IToken.Kind.IDENT);
+        keywords.put("float", IToken.Kind.IDENT);
+        keywords.put("boolean", IToken.Kind.IDENT);
+        keywords.put("color", IToken.Kind.IDENT);
+        keywords.put("image", IToken.Kind.IDENT);
+        keywords.put("void", IToken.Kind.IDENT);
 
         keywords.put("if", IToken.Kind.KW_IF);
         keywords.put("else", IToken.Kind.KW_ELSE);
         keywords.put("fi", IToken.Kind.KW_FI);
         keywords.put("write", IToken.Kind.KW_WRITE);
         keywords.put("console", IToken.Kind.KW_CONSOLE);
-
-        keywords.put("true", IToken.Kind.BOOLEAN_LIT);
-        keywords.put("false", IToken.Kind.BOOLEAN_LIT);
 
 
 
@@ -177,7 +167,7 @@ public class Lexer implements ILexer{
     //method for checking if it is going to be an ident.
     private boolean isChar(char c){
         if ((c >= 'A' && c<= 'Z') ||
-        (c >= 'a' && c <= 'z') || c== '_'){
+        (c >= 'a' && c <= 'z')){
             return true;
         }
         else{
@@ -193,16 +183,13 @@ public class Lexer implements ILexer{
             return false;
         }
     }
+    //method for classifying if lexeme is an ident
     private void ident(){
         //while the ident is alpha numeric, keep reading in tokens.
         while(identHelper(charPeek())){
             advanceToken();
         }
-        String checkType = source.substring(start, current);
-        IToken.Kind type = keywords.get(checkType);
-        if(type == null)
-            type = IToken.Kind.IDENT;
-        addToken(type);
+        addToken(IToken.Kind.IDENT);
     }
 
     //this is like the stringLit() method but for numbers
@@ -228,7 +215,7 @@ public class Lexer implements ILexer{
             addToken(IToken.Kind.INT_LIT,Integer.parseInt(source.substring(start, current) ));
         }
     }
-
+    //peek but one more char over
     private char peekOver(){
         if(1+current >= source.length()){
             return '\0';
@@ -242,7 +229,7 @@ public class Lexer implements ILexer{
     }
     //method for handling string literals
     private void stringLit() throws LexicalException {
-        //this will be a string *************
+        //String block functionality here?
 
             //while not at end of string and not on a closing quote
             while (!AtEnd() && charPeek() != '"') {
@@ -309,6 +296,7 @@ public class Lexer implements ILexer{
     public IToken peek() throws LexicalException {
         return null;
     }
+
     //peek method for characters
     public char charPeek(){
         if(AtEnd()) return '\0';
@@ -327,7 +315,8 @@ public class Lexer implements ILexer{
     }
     //*************************MAIN**************************************
     public static void main(String[] args) throws LexicalException {
-        Lexer lex = new Lexer("int 2");
+        Lexer lex = new Lexer("""
+                test""");
         lex.runLex();
     }
 
