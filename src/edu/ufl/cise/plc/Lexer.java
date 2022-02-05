@@ -167,7 +167,7 @@ public class Lexer implements ILexer{
     //method for checking if it is going to be an ident.
     private boolean isChar(char c){
         if ((c >= 'A' && c<= 'Z') ||
-        (c >= 'a' && c <= 'z')){
+        (c >= 'a' && c <= 'z') || c== '_'){
             return true;
         }
         else{
