@@ -9,7 +9,8 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
-
+import java.util.Map;
+import java.util.HashMap;
 
 //Main is at the bottom.
 
@@ -19,7 +20,41 @@ public class Lexer implements ILexer{
     private int start = 0;
     private int current = 0;
     private int line = 1;
+    private static final Map<String, IToken.Kind> keywords;
+    static{
+        keywords = new HashMap<>();
+        keywords.put("BLACK", IToken.Kind.COLOR_CONST);
+        keywords.put("BLUE", IToken.Kind.COLOR_CONST);
+        keywords.put("CYAN", IToken.Kind.COLOR_CONST);
+        keywords.put("DARK_GRAY", IToken.Kind.COLOR_CONST);
+        keywords.put("GRAY", IToken.Kind.COLOR_CONST);
+        keywords.put("GREEN", IToken.Kind.COLOR_CONST);
+        keywords.put("LIGHT_GRAY", IToken.Kind.COLOR_CONST);
+        keywords.put("MAGENTA", IToken.Kind.COLOR_CONST);
+        keywords.put("ORANGE", IToken.Kind.COLOR_CONST);
+        keywords.put("PINK", IToken.Kind.COLOR_CONST);
+        keywords.put("RED", IToken.Kind.COLOR_CONST);
+        keywords.put("WHITE", IToken.Kind.COLOR_CONST);
+        keywords.put("YELLOW", IToken.Kind.COLOR_CONST);
 
+        keywords.put("string", IToken.Kind.IDENT);
+        keywords.put("int", IToken.Kind.IDENT);
+        keywords.put("float", IToken.Kind.IDENT);
+        keywords.put("boolean", IToken.Kind.IDENT);
+        keywords.put("color", IToken.Kind.IDENT);
+        keywords.put("image", IToken.Kind.IDENT);
+        keywords.put("void", IToken.Kind.IDENT);
+
+        keywords.put("if", IToken.Kind.KW_IF);
+        keywords.put("else", IToken.Kind.KW_ELSE);
+        keywords.put("fi", IToken.Kind.KW_FI);
+        keywords.put("write", IToken.Kind.KW_WRITE);
+        keywords.put("console", IToken.Kind.KW_CONSOLE);
+
+
+
+        //keywords.put("BLACK", new Token(IToken.Kind.COLOR_CONST), "BLACK", "");
+    }
     Lexer(String source){
         this.source = source;
     }
