@@ -67,7 +67,7 @@ public class Lexer implements ILexer{
             determineTokenKind();
 
         }
-        tokens.add(new Token(IToken.Kind.EOF, "", null, line));
+        tokens.add(new Token(IToken.Kind.EOF, "", null, line,current));
         return tokens;
     }
 
@@ -282,7 +282,7 @@ public class Lexer implements ILexer{
     private void addToken(IToken.Kind type, Object literal) {
         String text = source.substring(start, current);
 
-            tokens.add(new Token(type, text, literal, line));
+            tokens.add(new Token(type, text, literal, line, current));
 
     }
 
@@ -315,8 +315,7 @@ public class Lexer implements ILexer{
     }
     //*************************MAIN**************************************
     public static void main(String[] args) throws LexicalException {
-        Lexer lex = new Lexer("""
-                test""");
+        Lexer lex = new Lexer("yo");
         lex.runLex();
     }
 
