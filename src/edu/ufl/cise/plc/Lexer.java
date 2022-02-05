@@ -88,6 +88,7 @@ public class Lexer implements ILexer{
         //this first set of statements do not need a peek function to check
         //for additional elements of the lexeme
         switch (c) {
+            //case '#' : while(pe)
             //single char lexemes
             case '(' : addToken(IToken.Kind.LPAREN); break;
             case ')' : addToken(IToken.Kind.RPAREN); break;
@@ -109,6 +110,7 @@ public class Lexer implements ILexer{
             case ';' : addToken(IToken.Kind.SEMI); break;
             case ',' : addToken(IToken.Kind.COMMA); break;
             case '^' : addToken(IToken.Kind.RETURN); break;
+            case '/' : addToken(IToken.Kind.DIV); break;
 
             //OPERATORS - checks for a secondary character and classifies accordingly
 
@@ -138,14 +140,11 @@ public class Lexer implements ILexer{
             case '!' : addToken(secondChecker('=') ? IToken.Kind.NOT_EQUALS : IToken.Kind.BANG);
                 break;
                 //making sure to ignore comments.
-            case '/':
-                if(secondChecker('/')){
+            case '#':
                     //advances token past all characters until newline reached.
+                    if(charPeek() == '\r' && peekOver() == '\n')
+                        break;
                     while(charPeek() != '\n' && !AtEnd()) advanceToken();
-                }
-                else{
-                    addToken(IToken.Kind.DIV);
-                }
                 break;
                 //skippers
              case ' ':
@@ -198,7 +197,11 @@ public class Lexer implements ILexer{
         while(identHelper(charPeek())){
             advanceToken();
         }
-        addToken(IToken.Kind.IDENT);
+        String text = source.substring(start, current);
+        IToken.Kind kwType = keywords.get(text);
+        if(kwType == null)
+            kwType = IToken.Kind.IDENT;
+        addToken(kwType);
     }
 
     //this is like the stringLit() method but for numbers
@@ -324,8 +327,7 @@ public class Lexer implements ILexer{
     }
     //*************************MAIN**************************************
     public static void main(String[] args) throws LexicalException {
-        Lexer lex = new Lexer("""
-                test""");
+        Lexer lex = new Lexer("string foo = bar #this is a comment");
         lex.runLex();
     }
 
