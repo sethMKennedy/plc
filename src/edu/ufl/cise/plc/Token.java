@@ -7,12 +7,15 @@ public class Token implements IToken{
     String lexeme;
     Object literal;
     int line;
+    int col;
+
     //Token constructor
-    Token(Kind kind, String lexeme, Object literal, int line ){
+    Token(Kind kind, String lexeme, Object literal, int line, int col ){
         this.kind = kind;
         this.lexeme = lexeme;
         this.literal = literal;
         this.line = line;
+        this.col = col;
     }
 
     //returns the token kind
@@ -28,7 +31,7 @@ public class Token implements IToken{
 
     @Override
     public SourceLocation getSourceLocation() {
-        return source;
+        return new SourceLocation(line,col);
     }
 
     @Override

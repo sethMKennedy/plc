@@ -11,6 +11,7 @@ public class CompilerComponentFactory {
 		//TODO:  modify this method so it returns an instance of your Lexer instead of throwing the exception.
 
 		      Lexer lex = new Lexer(input);
+
 		      return lex;
 	}
 	

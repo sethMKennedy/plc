@@ -1,4 +1,4 @@
-/*package edu.ufl.cise.plc;
+package edu.ufl.cise.plc;
 
 import edu.ufl.cise.plc.CompilerComponentFactory;
 import edu.ufl.cise.plc.IToken.Kind;
@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class LexerTests {
 
-	ILexer getLexer(String input){
+	ILexer getLexer(String input) throws LexicalException {
 		 return CompilerComponentFactory.getLexer(input);
 	}
 	
@@ -182,4 +182,4 @@ public class LexerTests {
 		});
 	}
 
-}*/
+}
