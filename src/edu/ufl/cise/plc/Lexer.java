@@ -183,6 +183,7 @@ public class Lexer implements ILexer{
             return false;
         }
     }
+    //method for classifying if lexeme is an ident
     private void ident(){
         //while the ident is alpha numeric, keep reading in tokens.
         while(identHelper(charPeek())){
@@ -214,7 +215,7 @@ public class Lexer implements ILexer{
             addToken(IToken.Kind.INT_LIT,Integer.parseInt(source.substring(start, current) ));
         }
     }
-
+    //peek but one more char over
     private char peekOver(){
         if(1+current >= source.length()){
             return '\0';
@@ -228,7 +229,7 @@ public class Lexer implements ILexer{
     }
     //method for handling string literals
     private void stringLit() throws LexicalException {
-        //this will be a string *************
+        //String block functionality here?
 
             //while not at end of string and not on a closing quote
             while (!AtEnd() && charPeek() != '"') {
@@ -295,6 +296,7 @@ public class Lexer implements ILexer{
     public IToken peek() throws LexicalException {
         return null;
     }
+
     //peek method for characters
     public char charPeek(){
         if(AtEnd()) return '\0';
@@ -313,7 +315,8 @@ public class Lexer implements ILexer{
     }
     //*************************MAIN**************************************
     public static void main(String[] args) throws LexicalException {
-        Lexer lex = new Lexer("test");
+        Lexer lex = new Lexer("""
+                test""");
         lex.runLex();
     }
 

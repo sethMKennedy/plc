@@ -15,8 +15,6 @@ public class Token implements IToken{
         this.line = line;
     }
 
-
-
     //returns the token kind
     @Override
     public Kind getKind() {
@@ -56,8 +54,15 @@ public class Token implements IToken{
 
     @Override
     public boolean getBooleanValue() {
-        return false;
+        if(this.kind == Kind.BOOLEAN_LIT)
+        {
+            return Boolean.parseBoolean(String.valueOf(literal));
+        }
+            else{
+                throw new UnsupportedOperationException("Not a boolean");
+            }
     }
+
 
     @Override
     public String getStringValue() {
