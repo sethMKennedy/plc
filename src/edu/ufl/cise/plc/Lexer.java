@@ -37,19 +37,29 @@ public class Lexer implements ILexer{
         keywords.put("WHITE", IToken.Kind.COLOR_CONST);
         keywords.put("YELLOW", IToken.Kind.COLOR_CONST);
 
-        keywords.put("string", IToken.Kind.IDENT);
-        keywords.put("int", IToken.Kind.IDENT);
-        keywords.put("float", IToken.Kind.IDENT);
-        keywords.put("boolean", IToken.Kind.IDENT);
-        keywords.put("color", IToken.Kind.IDENT);
-        keywords.put("image", IToken.Kind.IDENT);
-        keywords.put("void", IToken.Kind.IDENT);
+        keywords.put("getRed", IToken.Kind.COLOR_OP);
+        keywords.put("getGreen", IToken.Kind.COLOR_OP);
+        keywords.put("getBlue", IToken.Kind.COLOR_OP);
+
+        keywords.put("getWidth", IToken.Kind.IMAGE_OP);
+        keywords.put("getHeight", IToken.Kind.IMAGE_OP);
+
+        keywords.put("string", IToken.Kind.TYPE);
+        keywords.put("int", IToken.Kind.TYPE);
+        keywords.put("float", IToken.Kind.TYPE);
+        keywords.put("boolean", IToken.Kind.TYPE);
+        keywords.put("color", IToken.Kind.TYPE);
+        keywords.put("image", IToken.Kind.TYPE);
+        keywords.put("void", IToken.Kind.TYPE);
 
         keywords.put("if", IToken.Kind.KW_IF);
         keywords.put("else", IToken.Kind.KW_ELSE);
         keywords.put("fi", IToken.Kind.KW_FI);
         keywords.put("write", IToken.Kind.KW_WRITE);
         keywords.put("console", IToken.Kind.KW_CONSOLE);
+
+        keywords.put("true", IToken.Kind.BOOLEAN_LIT);
+        keywords.put("false", IToken.Kind.BOOLEAN_LIT);
 
 
 
@@ -188,7 +198,11 @@ public class Lexer implements ILexer{
         while(identHelper(charPeek())){
             advanceToken();
         }
-        addToken(IToken.Kind.IDENT);
+        String checkType = source.substring(start, current);
+        IToken.Kind type = keywords.get(checkType);
+        if(type == null)
+            type = IToken.Kind.IDENT;
+        addToken(type);
     }
 
     //this is like the stringLit() method but for numbers
@@ -313,7 +327,7 @@ public class Lexer implements ILexer{
     }
     //*************************MAIN**************************************
     public static void main(String[] args) throws LexicalException {
-        Lexer lex = new Lexer("test");
+        Lexer lex = new Lexer("int 2");
         lex.runLex();
     }
 
