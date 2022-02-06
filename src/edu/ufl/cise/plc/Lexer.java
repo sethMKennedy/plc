@@ -1,5 +1,7 @@
 package edu.ufl.cise.plc;
 
+import org.w3c.dom.ls.LSOutput;
+
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -11,20 +13,24 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.Map;
 import java.util.HashMap;
-
 //Main is at the bottom.
 
 public class Lexer implements ILexer {
     private String source;
     private final List<Token> tokens = new ArrayList<>();
+    int tokenPos =0;
     private int start = 0;
     private int current = 0;
     private Token currentToken;
-    private int line = 1;
+    private int line = 0;
     private int counter = 0;
+    private int column = 0;
     //private int column = 0;
     private static final Map<String, IToken.Kind> keywords;
 
+    public void setCounter(int foo) {
+        counter = foo;
+    }
     static {
         keywords = new HashMap<>();
         keywords.put("BLACK", IToken.Kind.COLOR_CONST);
@@ -40,7 +46,7 @@ public class Lexer implements ILexer {
         keywords.put("RED", IToken.Kind.COLOR_CONST);
         keywords.put("WHITE", IToken.Kind.COLOR_CONST);
         keywords.put("YELLOW", IToken.Kind.COLOR_CONST);
-
+       // System.out.println("Hash map");
         keywords.put("getWidth", IToken.Kind.IMAGE_OP);
         keywords.put("getHeight", IToken.Kind.IMAGE_OP);
 
@@ -81,6 +87,7 @@ public class Lexer implements ILexer {
             determineTokenKind();
 
         }
+       // System.out.println("token added from scan tokens");
         tokens.add(new Token(IToken.Kind.EOF, "", null, line, current));
         return tokens;
     }
@@ -108,6 +115,7 @@ public class Lexer implements ILexer {
                 addToken(IToken.Kind.RSQUARE);
                 break;
             case '+':
+               // System.out.println("plus token added");
                 addToken(IToken.Kind.PLUS);
                 break;
             case '-':
@@ -286,6 +294,7 @@ public class Lexer implements ILexer {
         advanceToken();
         //captures the string without quotes
         String stringLit = source.substring(start + 1, current - 1);
+        column++;
         addToken(IToken.Kind.STRING_LIT, stringLit);
 
     }
@@ -323,17 +332,16 @@ public class Lexer implements ILexer {
         counter++;
         String text = source.substring(start, current);
         //tracking what the current token is.
-        currentToken = new Token(type, text, literal, line, current);
+        currentToken = new Token(type, text, literal, line, column);
+       // System.out.println(type + " token added");
         tokens.add(currentToken);
-
-
     }
 
 
     @Override
     public IToken next() throws LexicalException {
-        if (tokens.size() != 0) {
-            System.out.println(tokens.get(counter));
+        if (tokens.size() != 0 && tokens.get(counter).getKind() != IToken.Kind.EOF) {
+            //System.out.println(tokens.get(counter));
             return tokens.get(counter++);
         }
         //is empty
@@ -347,7 +355,9 @@ public class Lexer implements ILexer {
 
     @Override
     public IToken peek() throws LexicalException {
-        return null;
+
+        return  (IToken)tokens.get(tokenPos);
+       // return null;
     }
 
     //peek method for characters
@@ -356,7 +366,7 @@ public class Lexer implements ILexer {
         return source.charAt(current);
     }
 
-    private void runLex() throws LexicalException {
+    public void runLex() throws LexicalException {
         Scanner scan = new Scanner(source);
         //runs the lexer, scanning in the tokens.
         List<Token> tokens = scanTokens();
