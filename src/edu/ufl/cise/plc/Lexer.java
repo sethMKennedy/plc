@@ -295,6 +295,8 @@ public class Lexer implements ILexer {
         //captures the string without quotes
         String stringLit = source.substring(start + 1, current - 1);
         column++;
+        if(charPeek() == '\n')
+            column=0;
         addToken(IToken.Kind.STRING_LIT, stringLit);
 
     }

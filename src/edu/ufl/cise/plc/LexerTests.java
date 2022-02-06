@@ -93,7 +93,7 @@ public class LexerTests {
 	}
 
 	//comments should be skipped
-	/*@Test
+	@Test
 	void testComment0() throws LexicalException {
 		//Note that the quotes around "This is a string" are passed to the lexer.
 		String input = """
@@ -103,11 +103,12 @@ public class LexerTests {
 				""";
 		show(input);
 		ILexer lexer = getLexer(input);
+		lexer.setCounter(0);
 		checkToken(lexer.next(), Kind.STRING_LIT, 0,0);
 		checkToken(lexer.next(), Kind.TIMES, 2,0);
 		checkEOF(lexer.next());
 	}
-/*
+
 	//Example for testing input with an illegal character
 	@Test
 	void testError0() throws LexicalException {
@@ -117,6 +118,7 @@ public class LexerTests {
 				""";
 		show(input);
 		ILexer lexer = getLexer(input);
+		//lexer.setCounter(0);
 		//this check should succeed
 		checkIdent(lexer.next(), "abc");
 		//this is expected to throw an exception since @ is not a legal
@@ -128,7 +130,7 @@ public class LexerTests {
 	}
 
 	//Several identifiers to test positions
-	@Test
+	/*@Test
 	public void testIdent0() throws LexicalException {
 		String input = """
 				abc
