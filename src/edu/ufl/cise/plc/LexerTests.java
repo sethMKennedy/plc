@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class LexerTests {
 
+
 	ILexer getLexer(String input) throws LexicalException {
 		 return CompilerComponentFactory.getLexer(input);
 	}

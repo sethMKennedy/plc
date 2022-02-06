@@ -14,15 +14,18 @@ import java.util.HashMap;
 
 //Main is at the bottom.
 
-public class Lexer implements ILexer{
+public class Lexer implements ILexer {
     private String source;
     private final List<Token> tokens = new ArrayList<>();
     private int start = 0;
     private int current = 0;
+    private Token currentToken;
     private int line = 1;
+    private int counter = 0;
     //private int column = 0;
     private static final Map<String, IToken.Kind> keywords;
-    static{
+
+    static {
         keywords = new HashMap<>();
         keywords.put("BLACK", IToken.Kind.COLOR_CONST);
         keywords.put("BLUE", IToken.Kind.COLOR_CONST);
@@ -65,13 +68,14 @@ public class Lexer implements ILexer{
 
         //keywords.put("BLACK", new Token(IToken.Kind.COLOR_CONST), "BLACK", "");
     }
-    Lexer(String source){
+
+    Lexer(String source) {
         this.source = source;
     }
 
     //read in the raw source code
-     List<Token> scanTokens() throws LexicalException {
-        while(!AtEnd()){
+    List<Token> scanTokens() throws LexicalException {
+        while (!AtEnd()) {
             //beginning of a new lexeme. not at end.
             start = current;
             determineTokenKind();
@@ -91,116 +95,137 @@ public class Lexer implements ILexer{
         switch (c) {
             //case '#' : while(pe)
             //single char lexemes
-            case '(' : addToken(IToken.Kind.LPAREN); break;
-            case ')' : addToken(IToken.Kind.RPAREN); break;
-            case '[' : addToken(IToken.Kind.LSQUARE); break;
-            case ']' : addToken(IToken.Kind.RSQUARE); break;
-            case '+' : addToken(IToken.Kind.PLUS); break;
-            case '-' :
-                if(secondChecker('>')){
+            case '(':
+                addToken(IToken.Kind.LPAREN);
+                break;
+            case ')':
+                addToken(IToken.Kind.RPAREN);
+                break;
+            case '[':
+                addToken(IToken.Kind.LSQUARE);
+                break;
+            case ']':
+                addToken(IToken.Kind.RSQUARE);
+                break;
+            case '+':
+                addToken(IToken.Kind.PLUS);
+                break;
+            case '-':
+                if (secondChecker('>')) {
                     addToken(IToken.Kind.RARROW);
-                }
-                else{
+                } else {
                     addToken(IToken.Kind.MINUS);
                 }
                 break;
-            case '*' : addToken(IToken.Kind.TIMES); break;
-            case '%' : addToken(IToken.Kind.MOD); break;
-            case '&' : addToken(IToken.Kind.AND); break;
-            case '|' : addToken(IToken.Kind.OR); break;
-            case ';' : addToken(IToken.Kind.SEMI); break;
-            case ',' : addToken(IToken.Kind.COMMA); break;
-            case '^' : addToken(IToken.Kind.RETURN); break;
-            case '/' : addToken(IToken.Kind.DIV); break;
+            case '*':
+                addToken(IToken.Kind.TIMES);
+                break;
+            case '%':
+                addToken(IToken.Kind.MOD);
+                break;
+            case '&':
+                addToken(IToken.Kind.AND);
+                break;
+            case '|':
+                addToken(IToken.Kind.OR);
+                break;
+            case ';':
+                addToken(IToken.Kind.SEMI);
+                break;
+            case ',':
+                addToken(IToken.Kind.COMMA);
+                break;
+            case '^':
+                addToken(IToken.Kind.RETURN);
+                break;
+            case '/':
+                addToken(IToken.Kind.DIV);
+                break;
 
             //OPERATORS - checks for a secondary character and classifies accordingly
 
-            case '<' :
-                if(secondChecker('<')){
+            case '<':
+                if (secondChecker('<')) {
                     addToken(IToken.Kind.LANGLE);
-                }
-                else if (secondChecker('=')){
+                } else if (secondChecker('=')) {
                     addToken(IToken.Kind.LE);
-                }
-                else if(secondChecker('-')){
+                } else if (secondChecker('-')) {
                     addToken(IToken.Kind.LARROW);
-                }
-                else addToken(IToken.Kind.LT);
+                } else addToken(IToken.Kind.LT);
                 break;
-            case '>' :
-                if(secondChecker('>')){
+            case '>':
+                if (secondChecker('>')) {
                     addToken(IToken.Kind.RANGLE);
-                }
-                else if (secondChecker('=')){
+                } else if (secondChecker('=')) {
                     addToken(IToken.Kind.GE);
-                }
-                else addToken(IToken.Kind.GT);
+                } else addToken(IToken.Kind.GT);
                 break;
-            case '=' : addToken(secondChecker('=') ? IToken.Kind.EQUALS : IToken.Kind.ASSIGN);
+            case '=':
+                addToken(secondChecker('=') ? IToken.Kind.EQUALS : IToken.Kind.ASSIGN);
                 break;
-            case '!' : addToken(secondChecker('=') ? IToken.Kind.NOT_EQUALS : IToken.Kind.BANG);
+            case '!':
+                addToken(secondChecker('=') ? IToken.Kind.NOT_EQUALS : IToken.Kind.BANG);
                 break;
-                //making sure to ignore comments.
+            //making sure to ignore comments.
             case '#':
-                    //advances token past all characters until newline reached.
-                    if(charPeek() == '\r' && peekOver() == '\n')
-                        break;
-                    while(charPeek() != '\n' && !AtEnd()) advanceToken();
+                //advances token past all characters until newline reached.
+                if (charPeek() == '\r' && peekOver() == '\n')
+                    break;
+                while (charPeek() != '\n' && !AtEnd()) advanceToken();
                 break;
-                //skippers
-             case ' ':
-             case '\r':
-             case '\t':
-                 break;
+            //skippers
+            case ' ':
+            case '\r':
+            case '\t':
+                break;
             case '\n':
                 line++;
                 break;
 
-                //STRING LITERALS
-            case '"': stringLit();
-            break;
+            //STRING LITERALS
+            case '"':
+                stringLit();
+                break;
 
             default:
-                if(isDigit(c)){
+                if (isDigit(c)) {
                     intLit();
-                }
-                else if (isChar(c)){
+                } else if (isChar(c)) {
                     ident();
-                }
-
-                else {
+                } else {
                     throw new LexicalException("Unexpected Character", line, 1);
                 }
         }
     }
+
     //method for checking if it is going to be an ident.
-    private boolean isChar(char c){
-        if ((c >= 'A' && c<= 'Z') ||
-        (c >= 'a' && c <= 'z')){
+    private boolean isChar(char c) {
+        if ((c >= 'A' && c <= 'Z') ||
+                (c >= 'a' && c <= 'z')) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
+
     //helper method for ident. can be a combo of alphabet chars and numbers.
-    private boolean identHelper(char c){
-        if(isChar(c) || isDigit(c)){
+    private boolean identHelper(char c) {
+        if (isChar(c) || isDigit(c)) {
             return true;
-        }
-        else{
+        } else {
             return false;
         }
     }
+
     //method for classifying if lexeme is an ident
-    private void ident(){
+    private void ident() {
         //while the ident is alpha numeric, keep reading in tokens.
-        while(identHelper(charPeek())){
+        while (identHelper(charPeek())) {
             advanceToken();
         }
         String text = source.substring(start, current);
         IToken.Kind kwType = keywords.get(text);
-        if(kwType == null)
+        if (kwType == null)
             kwType = IToken.Kind.IDENT;
         addToken(kwType);
     }
@@ -209,67 +234,69 @@ public class Lexer implements ILexer{
     private void intLit() throws LexicalException {
 
         boolean isFloat = false;
-        while(isDigit(charPeek())){
+        while (isDigit(charPeek())) {
             advanceToken();
         }
         //this checks for decimals, advances over decimal
-        if(isDigit(peekOver()) && (charPeek() =='.' )){
+        if (isDigit(peekOver()) && (charPeek() == '.')) {
             isFloat = true;
             advanceToken();
-            while(isDigit(charPeek())){
+            while (isDigit(charPeek())) {
                 advanceToken();
             }
         }
-        if(isFloat){
+        if (isFloat) {
             addToken(IToken.Kind.FLOAT_LIT, Float.parseFloat(source.substring(start, current)));
 
-        }
-        else{
-            addToken(IToken.Kind.INT_LIT,Integer.parseInt(source.substring(start, current) ));
+        } else {
+            addToken(IToken.Kind.INT_LIT, Integer.parseInt(source.substring(start, current)));
         }
     }
+
     //peek but one more char over
-    private char peekOver(){
-        if(1+current >= source.length()){
+    private char peekOver() {
+        if (1 + current >= source.length()) {
             return '\0';
         }
-        return source.charAt(current+1);
+        return source.charAt(current + 1);
     }
 
     //checks if the character is an integer 0-9.
-    private boolean isDigit(char c){
-        return c>= '0' && c <= '9';
+    private boolean isDigit(char c) {
+        return c >= '0' && c <= '9';
     }
+
     //method for handling string literals
     private void stringLit() throws LexicalException {
         //String block functionality here?
 
-            //while not at end of string and not on a closing quote
-            while (!AtEnd() && charPeek() != '"') {
-                //if the token is a newline, advance line counter.
-                if (charPeek() == '\n') {
-                    line++;
-                }
-                advanceToken();
-            }
-            //when the token reaches the end with no quote, string is incomplete
-            if (AtEnd()) {
-                throw new LexicalException("Unterminated String", line, 1);
-
+        //while not at end of string and not on a closing quote
+        while (!AtEnd() && charPeek() != '"') {
+            //if the token is a newline, advance line counter.
+            if (charPeek() == '\n') {
+                line++;
             }
             advanceToken();
-            //captures the string without quotes
-            String stringLit = source.substring(start + 1, current - 1);
-            addToken(IToken.Kind.STRING_LIT, stringLit);
+        }
+        //when the token reaches the end with no quote, string is incomplete
+        if (AtEnd()) {
+            throw new LexicalException("Unterminated String", line, 1);
+
+        }
+        advanceToken();
+        //captures the string without quotes
+        String stringLit = source.substring(start + 1, current - 1);
+        addToken(IToken.Kind.STRING_LIT, stringLit);
 
     }
+
     //this method only advances the scanner after checking for a secondary
     //character in longer lexemes like operators
-    private boolean secondChecker(char secondary){
+    private boolean secondChecker(char secondary) {
         //if the scanner is at the end of a token, there is no additional check
         if (AtEnd()) return false;
         //if the secondary character isnt what is expected, return false.
-        if(source.charAt(current) != secondary){
+        if (source.charAt(current) != secondary) {
             return false;
         }
         current++;
@@ -277,7 +304,7 @@ public class Lexer implements ILexer{
     }
 
     //method for checking if at the end of reading in current lexeme.
-    private boolean AtEnd(){
+    private boolean AtEnd() {
         return current >= source.length();
     }
 
@@ -293,17 +320,30 @@ public class Lexer implements ILexer{
 
     //adds the current token to the Token ArrayList
     private void addToken(IToken.Kind type, Object literal) {
+        counter++;
         String text = source.substring(start, current);
+        //tracking what the current token is.
+        currentToken = new Token(type, text, literal, line, current);
+        tokens.add(currentToken);
 
-            tokens.add(new Token(type, text, literal, line, current));
 
     }
 
 
     @Override
     public IToken next() throws LexicalException {
-        return null;
+        if (tokens.size() != 0) {
+            System.out.println(tokens.get(counter));
+            return tokens.get(counter++);
+        }
+        //is empty
+        else{
+            return new Token(IToken.Kind.EOF,"",null, 0, 0);
+        }
+
     }
+
+
 
     @Override
     public IToken peek() throws LexicalException {
@@ -328,7 +368,8 @@ public class Lexer implements ILexer{
     }
     //*************************MAIN**************************************
     public static void main(String[] args) throws LexicalException {
-        Lexer lex = new Lexer("string foo = bar #this is a comment");
+        Lexer lex = new Lexer("");
+
         lex.runLex();
     }
 
