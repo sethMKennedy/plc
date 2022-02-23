@@ -380,7 +380,7 @@ public class Lexer implements ILexer {
     }
     //*************************MAIN**************************************
     public static void main(String[] args) throws LexicalException {
-        Lexer lex = new Lexer("");
+        Lexer lex = new Lexer("string bar +");
 
         lex.runLex();
     }

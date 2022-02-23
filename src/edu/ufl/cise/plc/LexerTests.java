@@ -130,7 +130,7 @@ public class LexerTests {
 	}
 
 	//Several identifiers to test positions
-	/*@Test
+	@Test
 	public void testIdent0() throws LexicalException {
 		String input = """
 				abc
@@ -188,5 +188,5 @@ public class LexerTests {
 			lexer.next();
 		});
 	}
-*/
+
 }
