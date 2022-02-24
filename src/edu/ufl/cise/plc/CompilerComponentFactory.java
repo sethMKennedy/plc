@@ -14,5 +14,8 @@ public class CompilerComponentFactory {
 			  lex.runLex();
 		      return lex;
 	}
-	
+	public static IParser getParser(String input) throws SyntaxException {
+
+		return null;
+	}
 }
