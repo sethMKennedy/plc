@@ -136,7 +136,6 @@ public class LexerTests {
 				abc
 				  def
 				     ghi
-
 				""";
 		show(input);
 		ILexer lexer = getLexer(input);
@@ -188,68 +187,7 @@ public class LexerTests {
 			lexer.next();
 		});
 	}
-		ILexer getLexer(String input) throws LexicalException{
-		return CompilerComponentFactory.getLexer(input);
-	}
-
-	//makes it easy to turn output on and off (and less typing than System.out.println)
-	static final boolean VERBOSE = true;
-	void show(Object obj) {
-		if(VERBOSE) {
-			System.out.println(obj);
-		}
-	}
-
-	String getASCII(String s) {
-		int[] ascii = new int[s.length()];
-		for (int i = 0; i != s.length(); i++) {
-			ascii[i] = s.charAt(i);
-		}
-		return Arrays.toString(ascii);
-	}
-
-	//check that this token has the expected kind
-	void checkToken(IToken t, Kind expectedKind) {
-		assertEquals(expectedKind, t.getKind());
-	}
-
-	//check that the token has the expected kind and position
-	void checkToken(IToken t, Kind expectedKind, int expectedLine, int expectedColumn){
-		assertEquals(expectedKind, t.getKind());
-		assertEquals(new IToken.SourceLocation(expectedLine,expectedColumn), t.getSourceLocation());
-	}
-
-	//check that this token is an IDENT and has the expected name
-	void checkIdent(IToken t, String expectedName){
-		assertEquals(Kind.IDENT, t.getKind());
-		assertEquals(expectedName, t.getText());
-	}
-
-	//check that this token is an IDENT, has the expected name, and has the expected position
-	void checkIdent(IToken t, String expectedName, int expectedLine, int expectedColumn){
-		checkIdent(t,expectedName);
-		assertEquals(new IToken.SourceLocation(expectedLine,expectedColumn), t.getSourceLocation());
-	}
-
-	//check that this token is an INT_LIT with expected int value
-	void checkInt(IToken t, int expectedValue) {
-		assertEquals(Kind.INT_LIT, t.getKind());
-		assertEquals(expectedValue, t.getIntValue());
-	}
-
-	//check that this token  is an INT_LIT with expected int value and position
-	void checkInt(IToken t, int expectedValue, int expectedLine, int expectedColumn) {
-		checkInt(t,expectedValue);
-		assertEquals(new IToken.SourceLocation(expectedLine,expectedColumn), t.getSourceLocation());
-	}
-
-	//check that this token is the EOF token
-	void checkEOF(IToken t) {
-		checkToken(t, Kind.EOF);
-	}
-
-
-	//The lexer should add an EOF token to the end.
+	
 	@Test
 	void testEmpty() throws LexicalException {
 		String input = "";
@@ -314,7 +252,6 @@ public class LexerTests {
 				abc
 				  def
 				     ghi
-
 				""";
 		show(input);
 		ILexer lexer = getLexer(input);
@@ -457,7 +394,6 @@ public class LexerTests {
 			lexer.next();
 		});
 	}
-
 	@Test
 	void testErrorOnSingleDoubleQuote() throws LexicalException {
 		String input = "\"";
@@ -488,8 +424,6 @@ public class LexerTests {
 			>.<
 			Oh noes did I ...  thwow an ewwow
 			X.x
-
-
 			""";
 		show(input);
 		ILexer lexer = getLexer(input);
@@ -684,7 +618,6 @@ public class LexerTests {
 	 	for (int i = size - 1;i >= 0; i++) [
 	 		b = b + a[i];
 	 	]
-
   		if (display == true)
   		print(b);
 	  	""";
@@ -1046,5 +979,6 @@ public class LexerTests {
 			lexer.next();
 		});
 	}
+
 
 }
