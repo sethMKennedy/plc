@@ -16,6 +16,7 @@ public class CompilerComponentFactory {
 	}
 	public static IParser getParser(String input) throws SyntaxException {
 
+		//TODO: Return a parser
 		return null;
 	}
 }

@@ -368,7 +368,7 @@ public class Lexer implements ILexer {
         return source.charAt(current);
     }
 
-    public void runLex() throws LexicalException {
+    public List<Token> runLex() throws LexicalException {
         Scanner scan = new Scanner(source);
         //runs the lexer, scanning in the tokens.
         List<Token> tokens = scanTokens();
@@ -376,7 +376,7 @@ public class Lexer implements ILexer {
         for(Token token:tokens) {
             System.out.println(token.getKind()+ " " + token.getText());
         }
-
+        return tokens;
     }
     //*************************MAIN**************************************
     public static void main(String[] args) throws LexicalException {

@@ -16,23 +16,23 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 
-/*import edu.ufl.cise.plc.*;
-import edu.ufl.cise.plc.ast.ASTNode;
-import edu.ufl.cise.plc.ast.BinaryExpr;
-import edu.ufl.cise.plc.ast.BooleanLitExpr;
-import edu.ufl.cise.plc.ast.ConditionalExpr;
-import edu.ufl.cise.plc.ast.Expr;
-import edu.ufl.cise.plc.ast.FloatLitExpr;
-import edu.ufl.cise.plc.ast.IdentExpr;
-import edu.ufl.cise.plc.ast.IntLitExpr;
-import edu.ufl.cise.plc.ast.PixelSelector;
-import edu.ufl.cise.plc.ast.StringLitExpr;
-import edu.ufl.cise.plc.ast.UnaryExpr;
-import edu.ufl.cise.plc.ast.UnaryExprPostfix;*/
+
+import edu.ufl.cise.plc.ASTNode;
+import edu.ufl.cise.plc.BinaryExpr;
+import edu.ufl.cise.plc.BooleanLitExpr;
+import edu.ufl.cise.plc.ConditionalExpr;
+import edu.ufl.cise.plc.Expr;
+import edu.ufl.cise.plc.FloatLitExpr;
+import edu.ufl.cise.plc.IdentExpr;
+import edu.ufl.cise.plc.IntLitExpr;
+import edu.ufl.cise.plc.PixelSelector;
+import edu.ufl.cise.plc.StringLitExpr;
+import edu.ufl.cise.plc.UnaryExpr;
+import edu.ufl.cise.plc.UnaryExprPostfix;
 
 class Assignment2StarterTests {
 
-/*	private ASTNode getAST(String input) throws Exception {
+	/*private ASTNode getAST(String input) throws Exception {
 		IParser parser = CompilerComponentFactory.getParser(input);
 		return parser.parse();
 	}
