@@ -20,7 +20,7 @@ public class LexerTests {
 	//makes it easy to turn output on and off (and less typing than System.out.println)
 	static final boolean VERBOSE = true;
 	void show(Object obj) {
-		if(VERBOSE) {
+		if(VERBOSE) {//
 			System.out.println(obj);
 		}
 	}
