@@ -1,3 +1,4 @@
+
 package edu.ufl.cise.plc;
 import edu.ufl.cise.plc.Lexer;
 
@@ -10,7 +11,7 @@ public class Parser implements IParser {
 
     }
     public static void main(String[] args) throws LexicalException {
-        Lexer lex = new Lexer("99999999999999999999999999999999999999999999999999999999999999999999999");
+        Lexer lex = new Lexer("string bar +");
 
         List<Token> tokens = lex.runLex();
         System.out.println("foo");
