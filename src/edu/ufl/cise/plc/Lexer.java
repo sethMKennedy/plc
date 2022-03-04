@@ -375,7 +375,7 @@ public class Lexer implements ILexer {
         return source.charAt(current);
     }
 
-    public List<Token> runLex() throws LexicalException {
+    public List<Token> runLex() throws LexicalException {//
         Scanner scan = new Scanner(source);
         //runs the lexer, scanning in the tokens.
         List<Token> tokens = scanTokens();
