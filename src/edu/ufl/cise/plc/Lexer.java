@@ -257,7 +257,14 @@ public class Lexer implements ILexer {
             addToken(IToken.Kind.FLOAT_LIT, Float.parseFloat(source.substring(start, current)));
 
         } else {
-            addToken(IToken.Kind.INT_LIT, Integer.parseInt(source.substring(start, current)));
+            try {
+                //Integer.parseInt(source.substring(start, current));
+                addToken(IToken.Kind.INT_LIT, Integer.parseInt(source.substring(start, current)));
+            } catch (Exception e) {
+                System.out.println("Couldn't parse int! Too big?");
+                addToken(IToken.Kind.INT_LIT, 0);
+            }
+
         }
     }
 
@@ -378,9 +385,11 @@ public class Lexer implements ILexer {
         }
         return tokens;
     }
+
+
     //*************************MAIN**************************************
     public static void main(String[] args) throws LexicalException {
-        Lexer lex = new Lexer("string bar +");
+        Lexer lex = new Lexer("99999999999999999");
 
         lex.runLex();
     }

@@ -10,7 +10,7 @@ public class Parser implements IParser {
 
     }
     public static void main(String[] args) throws LexicalException {
-        Lexer lex = new Lexer("string bar +");
+        Lexer lex = new Lexer("99999999999999999999999999999999999999999999999999999999999999999999999");
 
         List<Token> tokens = lex.runLex();
         System.out.println("foo");

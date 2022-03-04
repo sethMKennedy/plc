@@ -20,7 +20,7 @@ public class LexerTests {
 	//makes it easy to turn output on and off (and less typing than System.out.println)
 	static final boolean VERBOSE = true;
 	void show(Object obj) {
-		if(VERBOSE) {//
+		if(VERBOSE) {
 			System.out.println(obj);
 		}
 	}
@@ -69,7 +69,7 @@ public class LexerTests {
 
 
 	//The lexer should add an EOF token to the end.
-	@Test
+	/*@Test
 	void testEmpty() throws LexicalException {
 		String input = "";
 		show(input);
@@ -186,7 +186,7 @@ public class LexerTests {
 		Exception e = assertThrows(LexicalException.class, () -> {
 			lexer.next();
 		});
-	}
+	}*/
 	
 	@Test
 	void testEmpty() throws LexicalException {
@@ -304,7 +304,7 @@ public class LexerTests {
 		});
 	}
 
-	@Test
+	/*@Test
 	public void testEscapeSequences0() throws LexicalException {
 		String input = "\"\\b \\t \\n \\f \\r \"";
 		show(input);
@@ -340,7 +340,7 @@ public class LexerTests {
 		String expectedText = "\" ...  \\\"  \\\'  \\\\  \""; //almost the same as input, but white space is omitted
 		show("expectedTextChars="+getASCII(expectedText));
 		assertEquals(expectedText,text);
-	}
+	}*/
 
 	//check that the token has the expected kind and position and text
 	void checkToken(IToken t, Kind expectedKind, int expectedLine, int expectedColumn, String expectedText){
@@ -539,7 +539,7 @@ public class LexerTests {
 		});
 	}
 
-	@Test
+	/*@Test
 	void testMany() throws LexicalException {
 		String input = """
 			[
@@ -580,7 +580,7 @@ public class LexerTests {
 		checkToken(lexer.next(), Kind.SEMI, 3,18);
 		checkToken(lexer.next(), Kind.RSQUARE, 4,0);
 		checkEOF(lexer.next());
-	}
+	}*/
 
 	@Test
 	public void testBang() throws LexicalException{
